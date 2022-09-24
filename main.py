@@ -8,12 +8,13 @@ stream = UMatFileVideoStream(0).start()
 def main():
     with open("seed","r") as f:
         seed(f.readline())
+    #set up variables for encryption/decryption
+    perms = 100
+    ts = [0]*perms*4
     while not stream.stopped:
         frame = stream.read()
         matrix = frame.get()
         #Example encode-decode
-        perms = 100
-        ts = [0]*perms*4
         for i in range(1, perms):
             ts[i*4] = randint(1, matrix.shape[0]-1)
             ts[i*4+1] = randint(1, matrix.shape[0]-1)
