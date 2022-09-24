@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 from random import seed
 from random import randint
