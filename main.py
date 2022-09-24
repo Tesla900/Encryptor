@@ -11,15 +11,22 @@ def main():
     while not stream.stopped:
         frame = stream.read()
         matrix = frame.get()
-        #Example shuffle
-        for i in range(1, 200):
-            a1 = randint(1, matrix.shape[0]-1)
-            b1 = randint(1, matrix.shape[0]-1)
-            matrix[[a1, b1],:] = matrix[[b1, a1],:]
-            a2 = randint(1, matrix.shape[1]-1)
-            b2 = randint(1, matrix.shape[1]-1)
-            matrix[:,[a2, b2]] = matrix[:,[b2, a2]]
-        cv2.imshow('frame', matrix)
+        #Example encode-decode
+        perms = 100
+        ts = [0]*perms*4
+        for i in range(1, perms):
+            ts[i*4] = randint(1, matrix.shape[0]-1)
+            ts[i*4+1] = randint(1, matrix.shape[0]-1)
+            matrix[[ts[i*4], ts[i*4+1]],:] = matrix[[ts[i*4+1], ts[i*4]],:]
+            ts[i*4+2] = randint(1, matrix.shape[1]-1)
+            ts[i*4+3] = randint(1, matrix.shape[1]-1)
+            matrix[:,[ts[i*4+2], ts[i*4+3]]] = matrix[:,[ts[i*4+3], ts[i*4+2]]]
+            cv2.imshow('encoded', matrix)
+        for i in range(perms-1, 0, -1):
+            matrix[:,[ts[i*4+2], ts[i*4+3]]] = matrix[:,[ts[i*4+3], ts[i*4+2]]]
+            matrix[[ts[i*4], ts[i*4+1]],:] = matrix[[ts[i*4+1], ts[i*4]],:]
+
+        cv2.imshow('decoded', matrix)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     stream.stop()
