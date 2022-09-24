@@ -25,11 +25,3 @@ class ListGenerator:
 
         return plist
     
-frame = cv2.imread("image.jpg")
-
-with open('seed.txt') as f:
-    myseed = f.readline()
-myseed = int(myseed, base=16)
-    
-listgen = ListGenerator(myseed, frame)
-listgen.generate()
